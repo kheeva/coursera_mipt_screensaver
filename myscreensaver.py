@@ -4,6 +4,9 @@ import pygame
 
 
 class Vec2d:
+    """
+        Points on screen and operations we able to do with them
+    """
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -42,6 +45,9 @@ class Vec2d:
 
 
 class Polyline:
+    """
+        Defines a set of a polyline points and methods to add/del and draw them
+    """
     def __init__(self, steps):
         self.steps = steps
         self._points = []
@@ -72,6 +78,9 @@ class Polyline:
 
 
 class Knot(Polyline):
+    """
+        Set of methods which help to draw lines by set of knots
+    """
     @staticmethod
     def get_point(points, alpha, deg=None):
         if deg is None:
@@ -114,6 +123,9 @@ class Knot(Polyline):
 
 
 class Display:
+    """
+        Defines pygame display settings and methods
+    """
     def __init__(self, width, height, name, steps):
         self.width = width
         self.height = height
