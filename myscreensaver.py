@@ -199,8 +199,10 @@ class Display:
                         knot.flush_points()
                     if event.key == self.__bindings['increase_steps']:
                         self.steps += 1
+                        knot.steps += 1
                     if event.key == self.__bindings['decrease_steps']:
                         self.steps -= 1 if self.steps > 1 else 0
+                        knot.steps -= 1 if knot.steps > 1 else 0
                     if event.key == self.__bindings['help']:
                         self.show_help = not self.show_help
 
