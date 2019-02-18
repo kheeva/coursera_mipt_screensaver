@@ -33,16 +33,18 @@ class Hero:
 class AbstractEffect(Hero, ABC):
     def __init__(self, base):
         self.base = base
-        self.effect = {}
+        self.effect_stats = {}
 
     def get_stats(self):
         return self._merge_stats(self.base.get_stats(), self.effect_stats)
 
+    @abstractmethod
     def get_positive_effects(self):
-        return self.base.get_positive_effects()
+        pass
 
+    @abstractmethod
     def get_negative_effects(self):
-        return self.base.get_negative_effects()
+        pass
 
     def _merge_stats(self, dict_1, dict_2):
         return {key: dict_1.get(key, 0) + dict_2.get(key, 0)
@@ -50,11 +52,24 @@ class AbstractEffect(Hero, ABC):
 
 
 class AbstractPositive(AbstractEffect):
+    @abstractmethod
+    def __init__(self, base):
+        super().__init__(base)
+
     def get_positive_effects(self):
         return self.base.get_positive_effects() + [self.__class__.__name__]
 
+    def get_negative_effects(self):
+        return self.base.get_negative_effects()
 
 class AbstractNegative(AbstractEffect):
+    @abstractmethod
+    def __init__(self, base):
+        super().__init__(base)
+
+    def get_positive_effects(self):
+        return self.base.get_positive_effects()
+
     def get_negative_effects(self):
         return self.base.get_negative_effects() + [self.__class__.__name__]
 
@@ -107,7 +122,7 @@ class EvilEye(AbstractNegative):
         }
 
 
-class Curse(AbstractPositive):
+class Curse(AbstractNegative):
     def __init__(self, base):
         super().__init__(base)
         self.effect_stats = {
