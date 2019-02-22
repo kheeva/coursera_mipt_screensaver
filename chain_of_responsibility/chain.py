@@ -18,7 +18,6 @@ class EventSet:
 class NullHandler:
     def __init__(self, node=None):
         self.__node = node
-        self.name = None
 
     def handle(self, obj, event):
         if self.__node is not None:
