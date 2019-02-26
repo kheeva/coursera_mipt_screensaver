@@ -1,7 +1,7 @@
 import pygame
 import os
 import Objects
-import ScreenEngine
+from ScreenEngine import ScreenEngine
 import Logic
 import Service
 
@@ -33,7 +33,7 @@ def create_game(sprite_size, is_new):
         engine = Logic.GameEngine()
         Service.service_init(sprite_size)
         Service.reload_game(engine, hero)
-        with ScreenEngine as SE:
+        with ScreenEngine() as SE:
             drawer = SE.GameSurface((640, 480), pygame.SRCALPHA, (0, 480),
                                     SE.ProgressBar((640, 120), (640, 0),
                                                    SE.InfoWindow((160, 600), (50, 50),
@@ -111,7 +111,7 @@ while engine.working:
             reward = engine.score - prev_score
             print(reward)
         else:
-            create_game()
+            create_game(size, True)
 
     gameDisplay.blit(drawer, (0, 0))
     drawer.draw(gameDisplay)

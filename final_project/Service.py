@@ -232,7 +232,14 @@ class EmptyMap(MapFactory):
 
     class Map:
         def __init__(self):
-            self.Map = []
+            self.Map = [[0 for _ in range(41)] for _ in range(41)]
+            for i in range(41):
+                for j in range(41):
+                    if i == 0 or j == 0 or i == 40 or j == 40:
+                        self.Map[j][i] = wall
+                    else:
+                        self.Map[j][i] = [wall, floor1, floor2, floor3, floor1,
+                                          floor2, floor3, floor1, floor2][random.randint(0, 8)]
 
         def get_map(self):
             return self.Map
