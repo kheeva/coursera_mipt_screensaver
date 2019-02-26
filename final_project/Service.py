@@ -2,7 +2,10 @@ import pygame
 import random
 import yaml
 import os
+from abc import ABC
+
 import Objects
+
 
 OBJECT_TEXTURE = os.path.join("texture", "objects")
 ENEMY_TEXTURE = os.path.join("texture", "enemies")
@@ -79,9 +82,24 @@ class MapFactory(yaml.YAMLObject):
 
         # FIXME
         # get _map and _obj
+        _map = cls.get_map()
+        _obj = cls.get_objects()
 
         return {'map': _map, 'obj': _obj}
 
+    @classmethod
+    def get_map(cls):
+        return cls.Map()
+
+    @classmethod
+    def get_objects(cls):
+        return cls.Objects()
+
+    class Map(ABC):
+        pass
+
+    class Objects(ABC):
+        pass
 
 class EndMap(MapFactory):
 
@@ -209,7 +227,7 @@ class RandomMap(MapFactory):
 
 # FIXME
 # add classes for YAML !empty_map and !special_map{}
-class EndMap(MapFactory):
+class EmptyMap(MapFactory):
     yaml_tag = "!empty_map"
 
     class Map:
