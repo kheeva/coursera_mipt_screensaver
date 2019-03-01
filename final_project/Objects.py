@@ -138,7 +138,8 @@ class Effect(Hero):
 
 class Enemy(Creature):
     def __init__(self, icon, stats, xp, position):
-        self.icon - icon
+        super().__init__(icon, stats, position)
+        self.icon = icon
         self.stats = stats
         self.xp = xp
         self.position = position
