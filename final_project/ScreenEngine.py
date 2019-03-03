@@ -38,14 +38,15 @@ class ScreenEngine:
 
         # FIXME connect_engine
         def connect_engine(self, engine):
-            return engine
+            if self.successor is not None:
+                self.successor.connect_engine(engine)
 
     class GameSurface(ScreenHandle):
 
         def connect_engine(self, engine):
             # FIXME save engine and send it to next in chain
             self.game_engine = engine
-            return engine
+            return super().connect_engine(engine)
 
         def draw_hero(self):
             self.game_engine.hero.draw(self)
@@ -93,7 +94,7 @@ class ScreenEngine:
             self.draw_hero()
 
         # draw next surface in chain
-
+            return super().draw(canvas)
 
     class ProgressBar(ScreenHandle):
 
@@ -104,7 +105,7 @@ class ScreenEngine:
         def connect_engine(self, engine):
             # FIXME save engine and send it to next in chain
             self.engine = engine
-            return engine
+            return super().connect_engine(engine)
 
         def draw(self, canvas):
             self.fill(ScreenEngine.colors["wooden"])
@@ -159,7 +160,7 @@ class ScreenEngine:
                       (550, 70))
 
         # draw next surface in chain
-
+            return super().draw(canvas)
 
     class InfoWindow(ScreenHandle):
 
@@ -183,12 +184,13 @@ class ScreenEngine:
 
         # FIXME
         # draw next surface in chain
-        # @classmethod
+            return super().draw(canvas)
+
         def connect_engine(self, engine):
             # FIXME set this class as Observer to engine and send it to next in
             # chain
             engine.subscribe(self)
-            return engine
+            return super().connect_engine(engine)
 
 
     class HelpWindow(ScreenHandle):
@@ -211,7 +213,7 @@ class ScreenEngine:
         def connect_engine(self, engine):
             # FIXME save engine and send it to next in chain
             self.engine = engine
-            return engine
+            return super().connect_engine(engine)
 
         def draw(self, canvas):
             alpha = 0
@@ -231,3 +233,4 @@ class ScreenEngine:
                               (150, 50 + 30 * i))
         # FIXME
         # draw next surface in chain
+            return super().draw(canvas)
