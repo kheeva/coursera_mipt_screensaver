@@ -68,6 +68,9 @@ class Hero(Creature):
             self.calc_max_HP()
             self.hp = self.max_hp
 
+    def draw(self, display):
+        display.draw_object(self.sprite, self.position)
+
 
 class Effect(Hero):
 
@@ -135,6 +138,38 @@ class Effect(Hero):
 
 # FIXME
 # add classes
+class Berserk(Effect):
+    def apply_effect(self):
+        print('u are berserk2!')
+        self.base.stats["strength"] += 4
+        self.base.stats["endurance"] += 4
+        self.base.stats["intelligence"] -= 4
+        return self.base
+
+
+class Blessing(Effect):
+    def apply_effect(self):
+        print('u r blessed!')
+        self.base.stats["strength"] += 2
+        self.base.stats["endurance"] += 2
+        self.base.stats["intelligence"] += 2
+        self.base.stats["luck"] += 2
+        return self.base
+
+
+class Weakness(Effect):
+    def __init__(self, base):
+        super().__init__(base)
+        self.base = base
+
+    def apply_effect(self):
+        print('u r blessed!')
+        self.base.stats["strength"] -= 2
+        self.base.stats["endurance"] -= 2
+        self.base.stats["intelligence"] -= 2
+        self.base.stats["luck"] -= 2
+        return self.base
+
 
 class Enemy(Creature):
     def __init__(self, icon, stats, xp, position):
@@ -146,3 +181,6 @@ class Enemy(Creature):
 
     def interact(self, engine, hero):
         self.action(engine, hero)
+
+    def action(self, engine, hero):
+        pass

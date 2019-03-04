@@ -55,8 +55,8 @@ class ScreenEngine:
 
             # FIXME || calculate (min_x,min_y) - left top corner
 
-            min_x = 0
-            min_y = 0
+            min_x = self.game_engine.hero.position[0] - 1
+            min_y = self.game_engine.hero.position[1] - 1
 
         ##
 
@@ -72,8 +72,8 @@ class ScreenEngine:
             size = self.game_engine.sprite_size
         # FIXME || calculate (min_x,min_y) - left top corner
 
-            min_x = 0
-            min_y = 0
+            min_x = self.game_engine.hero.position[0] - 1
+            min_y = self.game_engine.hero.position[1] - 1
 
         ##
             self.blit(sprite, ((coord[0] - min_x) * self.game_engine.sprite_size,
@@ -83,8 +83,8 @@ class ScreenEngine:
             size = self.game_engine.sprite_size
         # FIXME || calculate (min_x,min_y) - left top corner
 
-            min_x = 0
-            min_y = 0
+            min_x = self.game_engine.hero.position[0] - 1
+            min_y = self.game_engine.hero.position[1] - 1
 
         ##
             self.draw_map()
@@ -95,6 +95,7 @@ class ScreenEngine:
 
         # draw next surface in chain
             return super().draw(canvas)
+
 
     class ProgressBar(ScreenHandle):
 
@@ -177,7 +178,7 @@ class ScreenEngine:
             self.fill(ScreenEngine.colors["wooden"])
             size = self.get_size()
 
-            font = pygame.font.SysFont("comicsansms", 10)
+            font = pygame.font.SysFont("comicsansms", 25)
             for i, text in enumerate(self.data):
                 self.blit(font.render(text, True, ScreenEngine.colors["black"]),
                           (5, 20 + 18 * i))
