@@ -68,7 +68,7 @@ class Hero(Creature):
             self.calc_max_HP()
             self.hp = self.max_hp
 
-    def draw(self, display):
+    def draw(self, display, scale=1):
         display.draw_object(self.sprite, self.position)
 
 
@@ -140,47 +140,53 @@ class Effect(Hero):
 # add classes
 class Berserk(Effect):
     def apply_effect(self):
-        print('u are berserk2!')
-        self.base.stats["strength"] += 4
-        self.base.stats["endurance"] += 4
-        self.base.stats["intelligence"] -= 4
-        return self.base
+        self.stats["strength"] += 4
+        self.stats["endurance"] += 4
+        self.stats["intelligence"] -= 4
+        self.calc_max_HP()
+        return self
 
 
 class Blessing(Effect):
     def apply_effect(self):
-        print('u r blessed!')
-        self.base.stats["strength"] += 2
-        self.base.stats["endurance"] += 2
-        self.base.stats["intelligence"] += 2
-        self.base.stats["luck"] += 2
-        return self.base
+        self.stats["strength"] += 2
+        self.stats["endurance"] += 2
+        self.stats["intelligence"] += 2
+        self.stats["luck"] += 2
+        self.calc_max_HP()
+        return self
 
 
 class Weakness(Effect):
-    def __init__(self, base):
-        super().__init__(base)
-        self.base = base
-
     def apply_effect(self):
-        print('u r blessed!')
-        self.base.stats["strength"] -= 2
-        self.base.stats["endurance"] -= 2
-        self.base.stats["intelligence"] -= 2
-        self.base.stats["luck"] -= 2
-        return self.base
+        self.stats["strength"] -= 2
+        self.stats["endurance"] -= 2
+        self.stats["intelligence"] -= 2
+        self.stats["luck"] -= 2
+        self.calc_max_HP()
+        return self
+
+
+class Holy(Effect):
+    def apply_effect(self):
+        self.stats["intelligence"] += 1000
+        return self
 
 
 class Enemy(Creature):
-    def __init__(self, icon, stats, xp, position):
+    def __init__(self, icon, stats, xp, position, action):
         super().__init__(icon, stats, position)
         self.icon = icon
         self.stats = stats
         self.xp = xp
         self.position = position
+        self.action = action
 
     def interact(self, engine, hero):
-        self.action(engine, hero)
+        if self.action is not None:
+            self.action(engine, hero)
 
-    def action(self, engine, hero):
+        self.fight(engine, hero)
+
+    def fight(self, engine, hero):
         pass

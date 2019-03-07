@@ -52,8 +52,13 @@ def apply_blessing(engine, hero):
             engine.notify("Berserk applied")
     else:
         engine.score -= 0.1
+        if random.randint(0, 5) == 5:
+            apply_holy(engine, hero)
 
-    print(engine.hero.stats)
+
+def apply_holy(engine, hero):
+    engine.hero = Objects.Holy(hero)
+    engine.notify("Holy applied")
 
 
 def remove_effect(engine, hero):
@@ -63,6 +68,18 @@ def remove_effect(engine, hero):
         engine.hero = hero.base
         engine.hero.calc_max_HP()
         engine.notify("Effect removed")
+
+
+def apply_dispel(engine, hero):
+    if hero.stats['intelligence'] >= 1000:
+        engine.notify('You avoid dispel')
+        return
+
+    if 'base' in dir(hero):
+        return apply_dispel(engine, hero.base)
+    engine.hero = hero
+    engine.hero.calc_max_HP()
+    engine.notify('Dispel')
 
 
 def add_gold(engine, hero):
@@ -226,7 +243,7 @@ class RandomMap(MapFactory):
                                          random.randint(1, 39))
 
                     self.objects.append(Objects.Enemy(
-                        prop['sprite'], prop, prop['experience'], coord))
+                        prop['sprite'], prop, prop['experience'], coord, prop.get('action')))
 
             return self.objects
 
@@ -336,7 +353,7 @@ class SpecialMap(RandomMap):
                                          random.randint(1, 39))
 
                     self.objects.append(Objects.Enemy(
-                        prop['sprite'], prop, prop['experience'], coord))
+                        prop['sprite'], prop, prop['experience'], coord, prop.get('action')))
 
             return self.objects
 
@@ -370,6 +387,8 @@ def service_init(sprite_size, full=True):
                            'add_gold': add_gold,
                            'apply_blessing': apply_blessing,
                            'remove_effect': remove_effect,
+                           'dispel': apply_dispel,
+                           'holy': apply_holy,
                            'restore_hp': restore_hp}
 
     for obj in object_list_prob['objects']:
@@ -391,6 +410,8 @@ def service_init(sprite_size, full=True):
         prop_tmp = object_list_tmp['enemies'][enemy]
         prop['sprite'][0] = create_sprite(
             os.path.join(ENEMY_TEXTURE, prop_tmp['sprite'][0]), sprite_size)
+        if prop.get('action'):
+            prop['action'] = object_list_actions[prop_tmp['action']]
 
     file.close()
 
