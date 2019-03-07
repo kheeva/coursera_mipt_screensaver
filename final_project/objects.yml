@@ -62,7 +62,7 @@ enemies:
   necromancer:
     sprite: [necromancer.png]
     action: dispel
-    strengh: 100
+    strength: 100
     endurance: 50
     intelligence: 300
     luck: 20

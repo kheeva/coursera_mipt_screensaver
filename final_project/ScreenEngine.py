@@ -42,8 +42,7 @@ class ScreenEngine:
                 self.successor.connect_engine(engine)
 
     class GameSurface(ScreenHandle):
-        scale_x = 1
-        scale_y = 1
+        scale = 1
 
         def connect_engine(self, engine):
             # FIXME save engine and send it to next in chain
@@ -65,24 +64,29 @@ class ScreenEngine:
             if self.game_engine.map:
                 for i in range(len(self.game_engine.map[0]) - min_x):
                     for j in range(len(self.game_engine.map) - min_y):
-                        self.blit(self.game_engine.map[min_y + j][min_x + i][
-                                  0], (self.scale_x*i*self.game_engine.sprite_size, self.scale_y*j * self.game_engine.sprite_size))
+                        self.blit(self.game_engine.map[min_y + j][min_x + i][0],
+                                  (self.scale * i * self.game_engine.sprite_size,
+                                   self.scale*j * self.game_engine.sprite_size))
             else:
                 self.fill(ScreenEngine.colors["white"])
 
         def draw_object(self, sprite, coord):
-            size = self.game_engine.sprite_size * self.scale_x
+            size = self.game_engine.sprite_size
         # FIXME || calculate (min_x,min_y) - left top corner
 
             min_x = self.game_engine.hero.position[0] - 1
             min_y = self.game_engine.hero.position[1] - 1
 
         ##
-            self.blit(sprite, ((coord[0] - min_x) * size,
-                               (coord[1] - min_y) * size))
+            self.blit(pygame.transform.scale(
+                sprite,
+                (int(size*self.scale), int(size*self.scale))),
+                ((coord[0] - min_x) * size * self.scale,
+                (coord[1] - min_y) * size * self.scale)
+            )
 
         def draw(self, canvas):
-            size = self.game_engine.sprite_size * self.scale_x
+            size = self.game_engine.sprite_size
         # FIXME || calculate (min_x,min_y) - left top corner
 
             min_x = self.game_engine.hero.position[0] - 1
@@ -90,9 +94,17 @@ class ScreenEngine:
 
         ##
             self.draw_map()
+
             for obj in self.game_engine.objects:
-                self.blit(obj.sprite[0], ((obj.position[0] - min_x) * size,
-                                          (obj.position[1] - min_y) * size))
+                self.blit(
+                    pygame.transform.scale(
+                        obj.sprite[0],
+                        (int(size*self.scale), int(size*self.scale))
+                    ),
+                    ((obj.position[0] - min_x) * size * self.scale,
+                    (obj.position[1] - min_y) * size * self.scale)
+                )
+
             self.draw_hero()
 
         # draw next surface in chain
@@ -100,11 +112,7 @@ class ScreenEngine:
 
 
     class MiniGameSurface(GameSurface):
-        scale_x = 0.1
-        scale_y = 0.2
-
-        def draw_hero(self):
-            self.game_engine.hero.draw(self, scale=0.1)
+        scale = 0.2
 
 
     class ProgressBar(ScreenHandle):
@@ -177,20 +185,21 @@ class ScreenEngine:
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.len = 30
+            self.len = 20
             clear = []
             self.data = collections.deque(clear, maxlen=self.len)
 
         def update(self, value):
-            self.data.append(f"> {str(value)}")
+            self.data.appendleft(f"> {str(value)}")
 
         def draw(self, canvas):
-            self.fill(ScreenEngine.colors["green"])
+            self.fill(ScreenEngine.colors["wooden"])
             size = self.get_size()
 
             font = pygame.font.SysFont("comicsansms", 25)
             for i, text in enumerate(self.data):
-                self.blit(font.render(text, True, ScreenEngine.colors["black"]),
+                text_color = 'blue' if i == 0 else 'black'
+                self.blit(font.render(text, True, ScreenEngine.colors[text_color]),
                           (5, 20 + 18 * i))
 
         # FIXME

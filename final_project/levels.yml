@@ -1,11 +1,17 @@
 levels:
-#  - !empty_map {}
+  - !empty_map {}
   - !special_map
-    necromancer: 50
-#  - !special_map
-#    rat: 10
-#    knight: 5
-#  - !special_map
-#    rat: 10
-#    knight: 10
-#  - !random_map {}
+    rat: 5
+  - !special_map
+    rat: 10
+    knight: 5
+  - !special_map
+    rat: 10
+    knight: 10
+    dragon: 5
+  - !random_map {}
+  - !special_map
+    rat: 20
+    knight: 20
+    dragon: 10
+    necromancer: 5

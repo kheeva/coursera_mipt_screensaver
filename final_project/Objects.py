@@ -20,14 +20,12 @@ class AbstractObject(ABC):
 
 
 class Interactive(ABC):
-
     @abstractmethod
     def interact(self, engine, hero):
         pass
 
 
 class Ally(AbstractObject, Interactive):
-
     def __init__(self, icon, action, position):
         self.sprite = icon
         self.action = action
@@ -38,7 +36,6 @@ class Ally(AbstractObject, Interactive):
 
 
 class Creature(AbstractObject):
-
     def __init__(self, icon, stats, position):
         self.sprite = icon
         self.stats = stats
@@ -51,7 +48,6 @@ class Creature(AbstractObject):
 
 
 class Hero(Creature):
-
     def __init__(self, stats, icon):
         pos = [1, 1]
         self.level = 1
@@ -68,12 +64,11 @@ class Hero(Creature):
             self.calc_max_HP()
             self.hp = self.max_hp
 
-    def draw(self, display, scale=1):
+    def draw(self, display):
         display.draw_object(self.sprite, self.position)
 
 
 class Effect(Hero):
-
     def __init__(self, base):
         self.base = base
         self.stats = self.base.stats.copy()
@@ -189,4 +184,18 @@ class Enemy(Creature):
         self.fight(engine, hero)
 
     def fight(self, engine, hero):
-        pass
+        impact_force = ((self.stats['strength'] + self.stats['endurance']) // 2) * (
+            random.randint(1, self.stats['luck']))
+
+        hero.hp -= impact_force
+
+        if hero.hp <= 0:
+            engine.notify('You lose!')
+            engine.game_process = False
+        else:
+            hero.exp += self.xp
+            engine.notify(f'Got {self.xp} XP.')
+
+            is_enough_exp = len([i for i in hero.level_up()]) > 0
+            if is_enough_exp:
+                engine.notify('Level up!')
