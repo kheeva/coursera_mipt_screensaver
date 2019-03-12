@@ -18,17 +18,17 @@ ally:
   remove:
     sprite: [NPC_2.png]
     action: remove_effect
-    min-count: 1
-    max-count: 6
+    min-count: 0
+    max-count: 2
   heal:
     sprite: [NPC_3.png]
     action: restore_hp
-    min-count: 0
-    max-count: 3
+    min-count: 1
+    max-count: 7
   angel:
     sprite: [NPC_angel.png]
     action: holy
-    min-count: 0
+    min-count: 1
     max-count: 1
 enemies:
   rat:
@@ -40,30 +40,30 @@ enemies:
     experience: 50
   knight:
     sprite: [Enemy_1.png]
-    strength: 15
-    endurance: 15
+    strength: 10
+    endurance: 10
     intelligence: 15
-    luck: 10
-    experience: 200
+    luck: 2
+    experience: 300
   naga:
     sprite: [Naga.png]
-    strength: 25
-    endurance: 25
-    intelligence: 25
-    luck: 10
-    experience: 500
+    strength: 15
+    endurance: 15
+    intelligence: 5
+    luck: 3
+    experience: 700
   dragon:
     sprite: [dragon.png]
-    strength: 50
-    endurance: 50
-    intelligence: 50
-    luck: 5
+    strength: 20
+    endurance: 20
+    intelligence: 60
+    luck: 4
     experience: 1000
   necromancer:
     sprite: [necromancer.png]
     action: dispel
-    strength: 100
-    endurance: 50
+    strength: 35
+    endurance: 35
     intelligence: 300
-    luck: 20
-    experience: 3000
+    luck: 5
+    experience: 5000
